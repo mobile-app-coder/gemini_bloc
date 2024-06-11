@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gemini_app/presentation/bloc/starter/starter_bloc.dart';
 import 'package:gemini_app/presentation/controllers/home_controller.dart';
 import 'package:gemini_app/presentation/widgets/item_gemini_message.dart';
 import 'package:gemini_app/presentation/widgets/item_user_message.dart';
@@ -17,6 +18,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   HomeController controller = Get.find<HomeController>();
+
+
 
   @override
   void initState() {
