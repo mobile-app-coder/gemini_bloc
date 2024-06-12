@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gemini_app/core/constants/welcoming.dart';
-import 'package:gemini_app/presentation/controllers/starter_controller.dart';
-import 'package:gemini_app/presentation/pages/home_page.dart';
-import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:video_player/video_player.dart';
 
@@ -17,8 +14,6 @@ class StarterPage extends StatefulWidget {
 }
 
 class _StarterPageState extends State<StarterPage> {
-
-
   late StarterBloc bloc;
 
   @override

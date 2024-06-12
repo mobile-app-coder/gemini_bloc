@@ -22,13 +22,15 @@ class StarterBloc extends Bloc<StarterEvent, StarterState> {
 
   Future<void> _initVideoPlayer(
       StarterVideoEvent event, Emitter<StarterState> emit) async {
-    controller.play();
+
+
     controller.setLooping(true);
   }
 
   initVideoController() {
     controller = VideoPlayerController.asset("assets/videos/gemini.mp4")
       ..initialize();
+    controller.play();
   }
 
   onDispose() {

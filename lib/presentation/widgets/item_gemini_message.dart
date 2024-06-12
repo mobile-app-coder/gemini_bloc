@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:gemini_app/presentation/bloc/home/home_bloc.dart';
 import 'package:gemini_app/presentation/controllers/home_controller.dart';
 import 'package:gemini_app/presentation/pages/web_page.dart';
 import 'package:get/get.dart';
@@ -8,7 +9,7 @@ import 'package:get/get_core/src/get_main.dart';
 
 import '../../data/models/message_model.dart';
 
-Widget itemOfGeminiMessage(MessageModel message, HomeController controller, BuildContext context) {
+Widget itemOfGeminiMessage(MessageModel message, HomeBloc bloc, BuildContext context) {
   return Container(
     margin: const EdgeInsets.only(top: 20),
     padding: const EdgeInsets.all(16),
@@ -23,11 +24,13 @@ Widget itemOfGeminiMessage(MessageModel message, HomeController controller, Buil
           ),
           GestureDetector(
             onTap: () {
-              controller.speak(message.message);
+              //controller.speak(message.message);
+              bloc.speak(message.message);
             },
-            child:  Icon(
+            child:  const Icon(
+              color: Colors.grey,
               Icons.volume_up,
-              color: controller.speakerColor ,
+              //color: controller.speakerColor ,
             ),
           )
         ]),
