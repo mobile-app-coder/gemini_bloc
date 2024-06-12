@@ -19,6 +19,7 @@ import '../../../domain/usecases/get_messages_db_usecase.dart';
 import '../../../domain/usecases/save_message_db_usecase.dart';
 
 part 'home_event.dart';
+
 part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
@@ -40,7 +41,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   String? image;
 
-  apiTextOnly(String text) async {
+  Future apiTextOnly(String text) async {
     var either = await textOnlyUseCase.call(text);
     either.fold((l) {
       var messageModel = MessageModel(message: l, isMine: false);
@@ -53,7 +54,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     });
   }
 
-  apiTextAndImage(String text, String imageBase64) async {
+  Future apiTextAndImage(String text, String imageBase64) async {
     var either = await textAndImageUseCase.call(text, imageBase64);
     either.fold((l) {
       var messageModel = MessageModel(message: l, isMine: false);
@@ -71,20 +72,20 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     var myMessage =
         MessageModel(message: event.message, isMine: true, base64Image: image);
     messages.add(myMessage);
-
+    textController.clear();
     emit(HomeLoadingState());
 
     saveMessages(myMessage);
     if (image == null) {
-      apiTextOnly(event.message);
+      await apiTextOnly(event.message);
     } else {
-      apiTextAndImage(event.message, image!);
+      await apiTextAndImage(event.message, image!);
       image = null;
-      emit(HomeInitial());
+      emit(HomeMessagesLoadedState());
     }
     textController.clear();
 
-    emit(HomeInitial());
+    emit(HomeMessagesLoadedState());
   }
 
   Future<void> _onSelectImage(
