@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gemini_app/core/constants/welcoming.dart';
+import 'package:gemini_app/core/services/auth_service.dart';
+import 'package:gemini_app/core/services/log_service.dart';
 import 'package:lottie/lottie.dart';
 import 'package:video_player/video_player.dart';
 
@@ -23,13 +25,9 @@ class _StarterPageState extends State<StarterPage> {
     bloc.initVideoController();
     bloc.add(StarterVideoEvent());
     bloc.speak(WELCOMING_MESSAGE);
+    LogService.i(AuthService.isLoggedIn().toString());
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    bloc.onDispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,30 +56,58 @@ class _StarterPageState extends State<StarterPage> {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(30),
                         border: Border.all(color: Colors.white, width: 2)),
-                    child: MaterialButton(
-                        onPressed: () {
-                          bloc.callHomePage(context);
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Chat with gemini'.toUpperCase(),
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            const Icon(
-                              Icons.arrow_forward,
-                              color: Colors.white,
-                            )
-                          ],
-                        )),
+                    child: AuthService.isLoggedIn()
+                        ? MaterialButton(
+                            onPressed: () {
+                              bloc.callHomePage(context);
+                              //bloc.callGoogleSignIn(context);
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Chat with gemini'.toUpperCase(),
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                const Icon(
+                                  Icons.arrow_forward,
+                                  color: Colors.white,
+                                )
+                              ],
+                            ))
+                        : MaterialButton(
+                            onPressed: () {
+                              //bloc.callHomePage(context);
+
+                               bloc.callGoogleSignIn(context);
+
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Image(
+                                  height: 25,
+                                  width: 25,
+                                  image: AssetImage(
+                                      "assets/images/google_logo.png"),
+                                ),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                Text(
+                                  'Sign in with google'.toUpperCase(),
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                              ],
+                            )),
                   ),
                 ],
-              )
-            ]),
+              ),
+            ],
+            ),
           ),
         );
       },

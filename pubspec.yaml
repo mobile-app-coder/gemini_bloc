@@ -65,6 +65,15 @@ dependencies:
   #progress barcode_widget:
   linear_progress_bar: ^1.1.1
 
+  #firebase
+  firebase_core: ^3.1.0
+  firebase_auth:
+  google_sign_in: ^6.2.1
+  firebase_analytics: ^11.0.1
+
+  #google_sign_in
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -85,9 +94,3 @@ flutter:
     - assets/animations/
 
 
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic

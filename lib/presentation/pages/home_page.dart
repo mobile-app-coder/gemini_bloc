@@ -2,7 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gemini_app/core/services/auth_service.dart';
+import 'package:gemini_app/core/services/utils_service.dart';
 import 'package:gemini_app/presentation/bloc/home/home_bloc.dart';
 import 'package:gemini_app/presentation/widgets/item_gemini_message.dart';
 import 'package:gemini_app/presentation/widgets/item_user_message.dart';
@@ -35,10 +38,34 @@ class _HomePageState extends State<HomePage> {
           appBar: AppBar(
             centerTitle: true,
             backgroundColor: Colors.black,
-            title: Container(
+            title: SizedBox(
               width: 130,
               child: Lottie.asset("assets/animations/gemini_logo.json"),
             ),
+            actions: [
+              GestureDetector(
+                onTap: () {
+                  Utils.dialogCommon(
+                    context,
+                    "Log out",
+                    "Do you want to log out",
+                    false,
+                    () => {bloc.callSignOut(context)},
+                  );
+                },
+                child: const ClipRRect(
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                  child: Image(
+                    image: AssetImage("assets/images/profile.png"),
+                    width: 30,
+                    height: 30,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 10,
+              )
+            ],
           ),
           body: Container(
             //margin: const EdgeInsets.only(top: 10),
@@ -50,6 +77,7 @@ class _HomePageState extends State<HomePage> {
                   child: Stack(
                     children: [
                       ListView.builder(
+                        controller: bloc.scrollController,
                         itemCount: bloc.messages.length,
                         itemBuilder: (context, index) {
                           var message = bloc.messages[index];
@@ -175,7 +203,8 @@ class _HomePageState extends State<HomePage> {
                                   var text = bloc.textController.text
                                       .toString()
                                       .trim();
-                                  bloc.add(HomeSendEvent(message: text, base64Image: bloc.image));
+                                  bloc.add(HomeSendEvent(
+                                      message: text, base64Image: bloc.image));
                                 },
                               ),
                             ],

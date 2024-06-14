@@ -4,11 +4,13 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:shake/shake.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
+import '../../../core/services/auth_service.dart';
 import '../../../core/services/utils_service.dart';
 import '../../../data/models/message_model.dart';
 import '../../../data/repository/gemini_talk_repository_impl.dart';
@@ -17,6 +19,8 @@ import '../../../domain/usecases/gemini_only_text_usecase.dart';
 import '../../../domain/usecases/gemini_text_and_image_usecase.dart';
 import '../../../domain/usecases/get_messages_db_usecase.dart';
 import '../../../domain/usecases/save_message_db_usecase.dart';
+import '../../pages/starter_page.dart';
+import '../starter/starter_bloc.dart';
 
 part 'home_event.dart';
 
@@ -67,6 +71,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     });
   }
 
+  ScrollController scrollController = ScrollController();
+
   Future<void> _onSendPressed(
       HomeSendEvent event, Emitter<HomeState> emit) async {
     var myMessage =
@@ -84,7 +90,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       emit(HomeMessagesLoadedState());
     }
     textController.clear();
-
+    scrollController.animateTo(
+        scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeInOut
+    );
     emit(HomeMessagesLoadedState());
   }
 
@@ -221,5 +231,17 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       shakeCountResetTime: 3000,
       shakeThresholdGravity: 2.7,
     );
+  }
+
+  callSignOut(BuildContext context) async {
+    await AuthService.signOutFromGoogle();
+    Navigator.pushReplacement(context,
+        MaterialPageRoute(builder: (BuildContext context) {
+          return BlocProvider(
+            create: (context) => StarterBloc(),
+            child: const StarterPage(),
+          );
+        }));
+    var result = await AuthService.signOutFromGoogle();
   }
 }

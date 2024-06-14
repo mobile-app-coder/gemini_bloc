@@ -5,6 +5,7 @@ sealed class StarterEvent extends Equatable {
 }
 
 class StarterVideoEvent extends StarterEvent {
+
   @override
   List<Object?> get props => [];
 }
